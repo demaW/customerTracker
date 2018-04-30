@@ -28,7 +28,22 @@ public class CustomerDAOImplementation implements CustomerDAO {
 	@Override
 	public void saveCustomer(Customer cusomer) {
 		Session session = sessionFactory.getCurrentSession();
-		session.save(cusomer);
+		session.saveOrUpdate(cusomer);
+	}
+
+	@Override
+	public Customer getCustomer(int customerId) {
+		Session session = sessionFactory.getCurrentSession();
+		Customer customer = session.get(Customer.class, customerId);
+		return customer;
+	}
+
+	@Override
+	public void deleteCustomer(int customerId) {
+		Session session = sessionFactory.getCurrentSession();
+		Query query = session.createQuery("delete from Customer where id=:customerId");
+		query.setParameter("customerId", customerId);
+		query.executeUpdate();
 	}
 
 }

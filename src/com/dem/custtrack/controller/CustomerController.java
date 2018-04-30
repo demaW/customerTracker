@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dem.custtrack.entity.Customer;
 import com.dem.custtrack.service.CustomerService;
-import com.sun.org.apache.bcel.internal.classfile.Attribute;
 
 
 @Controller
@@ -39,7 +39,19 @@ public class CustomerController {
 	@PostMapping("/saveCustomer")
 	public String saveCustomer(@ModelAttribute("customer") Customer customer) {
 		customerService.saveCustomer(customer);
-		
+		return "redirect:/customer/list";
+	}
+	
+	@GetMapping("/showFormForUpdate")
+	public String updateCustomer(@RequestParam("customerId") int  customerId, Model model) {
+		Customer customer = customerService.getCustomer(customerId);
+		model.addAttribute("customer", customer);
+		return "customer-form";
+	}
+	
+	@GetMapping("/delete")
+	public String deleteCustomer(@RequestParam("customerId") int  customerId) {
+		customerService.deleteCustomer(customerId);
 		return "redirect:/customer/list";
 	}
 }
